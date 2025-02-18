@@ -10,3 +10,14 @@ export function login(data) {
     // },
   });
 }
+
+export function logout(data) {
+  return request({
+    url: "/api/logout",
+    method: "post",
+    data,
+    // headers: {
+    //   "Content-Type": "application/x-www-form-urlencoded",
+    // },
+  });
+}
