@@ -1,23 +1,30 @@
-import React from "react";
-import { Form, Input, Button } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, message } from "antd";
 import "./index.scss";
 import { useEffect } from "react";
 import { login } from "@/api/login";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+
   const onFinish = values => {
-    console.log("Success:", values);
+    setLoading(true);
+    login(values)
+      .then(res => {
+        if (res.code === 200) {
+          message.success(res.message);
+          setLoading(false);
+          // 登录成功做点什么
+        } else {
+          message.error(res.message);
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        message.error(err.message);
+        setLoading(false);
+      });
   };
-
-  const onFinishFailed = errorInfo => {
-    console.log("Failed:", errorInfo);
-  };
-
-  useEffect(() => {
-    login({ username: "admin", password: "admin" }).then(res => {
-      console.log(res);
-    });
-  }, []);
 
   return (
     <div className="login-container">
@@ -25,7 +32,6 @@ const Login = () => {
         name="login"
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         className="login-form"
       >
         <h2 className="login-title">登录</h2>
@@ -42,7 +48,12 @@ const Login = () => {
           <Input.Password placeholder="密码" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-button"
+            loading={loading}
+          >
             登录
           </Button>
         </Form.Item>

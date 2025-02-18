@@ -25,7 +25,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     // 对响应数据做些什么
-    return response;
+    return response.data;
   },
   error => {
     // 对响应错误做些什么
