@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import "./index.scss";
+import { useEffect } from "react";
+import { login } from "@/api/login";
 
 const Login = () => {
   const onFinish = values => {
@@ -10,6 +12,12 @@ const Login = () => {
   const onFinishFailed = errorInfo => {
     console.log("Failed:", errorInfo);
   };
+
+  useEffect(() => {
+    login({ username: "admin", password: "admin" }).then(res => {
+      console.log(res);
+    });
+  }, []);
 
   return (
     <div className="login-container">
