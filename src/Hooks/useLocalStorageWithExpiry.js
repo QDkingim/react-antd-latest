@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useLocalStorageWithExpiry = (key, defaultValue = null, expiry) => {
+const useLocalStorageWithExpiry = (key, defaultValue = {}, expiry) => {
   const [storedValue, setStoredValue] = useState(() => {
     const item = window.localStorage.getItem(key);
     if (!item) return defaultValue;

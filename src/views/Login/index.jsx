@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import "./index.scss";
-import { useEffect } from "react";
 import useLocalStorageWithExpiry from "@/Hooks/useLocalStorageWithExpiry";
 import { login } from "@/api/login";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useLocalStorageWithExpiry("auth-token", null, 3);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token]);
   const onFinish = values => {
+    // console.log(values);
     setLoading(true);
     login(values)
       .then(res => {
@@ -17,6 +24,7 @@ const Login = () => {
           setLoading(false);
           // 登录成功做点什么
           setToken(res.data.token);
+          location.href = "/";
         } else {
           message.error(res.message);
           setLoading(false);
@@ -32,7 +40,7 @@ const Login = () => {
     <div className="login-container">
       <Form
         name="login"
-        initialValues={{ remember: true }}
+        initialValues={{ username: "admin", password: "123456" }}
         onFinish={onFinish}
         className="login-form"
       >
