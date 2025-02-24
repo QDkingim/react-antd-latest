@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import "./index.scss";
 import { useEffect } from "react";
+import useLocalStorageWithExpiry from "@/Hooks/useLocalStorageWithExpiry";
 import { login } from "@/api/login";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-
+  const [token, setToken] = useLocalStorageWithExpiry("auth-token", null, 3);
   const onFinish = values => {
     setLoading(true);
     login(values)
@@ -15,6 +16,7 @@ const Login = () => {
           message.success(res.message);
           setLoading(false);
           // 登录成功做点什么
+          setToken(res.data.token);
         } else {
           message.error(res.message);
           setLoading(false);

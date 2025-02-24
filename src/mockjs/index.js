@@ -31,22 +31,3 @@ Mock.mock("/api/logout", "post", () => {
     message: "登出成功",
   };
 });
-
-// List API
-Mock.mock("/api/list", "get", () => {
-  return {
-    code: 200,
-    message: "获取商品列表成功",
-    data: Mock.mock({
-      "items|10-20": [
-        {
-          "id|+1": 1,
-          name: "@ctitle(5, 10)",
-          price: "@float(100, 1000, 2, 2)",
-          description: "@cparagraph(1, 3)",
-          image: "@image('200x200', '#50B347', '#FFF', 'Mock.js')",
-        },
-      ],
-    }),
-  };
-});
