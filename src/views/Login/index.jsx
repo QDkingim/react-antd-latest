@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import "./index.scss";
-import useLocalStorageWithExpiry from "@/Hooks/useLocalStorageWithExpiry";
-import { login } from "@/api/login";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAsync } from "@/store/user";
 import { useNavigate } from "react-router";
+import { setToken } from "@/utils/auth";
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
-  const [token, setToken] = useLocalStorageWithExpiry("auth-token", null, 3);
+  // const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token]);
+  let { data, loading, error } = useSelector(state => state.user);
   const onFinish = values => {
     // console.log(values);
-    setLoading(true);
-    login(values)
+    loading = true;
+    dispatch(loginAsync(values))
       .then(res => {
-        if (res.code === 200) {
-          message.success(res.message);
-          setLoading(false);
-          // 登录成功做点什么
-          setToken(res.data.token);
-          location.href = "/";
-        } else {
-          message.error(res.message);
-          setLoading(false);
-        }
+        // console.log(res, "res");
+
+        message.success("登录成功");
+        setToken(res.payload);
       })
       .catch(err => {
-        message.error(err.message);
-        setLoading(false);
+        message.error(err);
+      })
+      .finally(() => {
+        loading = false;
       });
   };
 

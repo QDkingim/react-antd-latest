@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import { data } from "react-router";
 
 export function login(data) {
   return request({
@@ -19,5 +20,13 @@ export function logout(data) {
     // headers: {
     //   "Content-Type": "application/x-www-form-urlencoded",
     // },
+  });
+}
+
+export function getUserInfo(data) {
+  return request({
+    url: "/api/userInfo",
+    method: "post",
+    data,
   });
 }
